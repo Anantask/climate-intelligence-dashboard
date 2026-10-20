@@ -1,0 +1,29 @@
+{
+    "model_name": "Random Forest Regressor",
+    "prediction_target": "Heat_Index",
+    "input_features": [
+        "Day_Temperature_C",
+        "Night_Temperature_C",
+        "Humidity_Percent",
+        "Rainfall_mm",
+        "Wind_Speed_kmph",
+        "Atmospheric_Pressure_hPa",
+        "Solar_Radiation_Wm2",
+        "Soil_Moisture_Percent",
+        "Cloud_Cover_Percent",
+        "AQI",
+        "CO2_ppm",
+        "Vegetation_Index_NDVI",
+        "Evaporation_mm",
+        "UV_Index"
+    ],
+    "risk_thresholds": {
+        "Low": "Heat Index < 39",
+        "Medium": "39 <= Heat Index < 44",
+        "High": "Heat Index >= 44"
+    },
+    "training_rows": 8800,
+    "testing_rows": 2200,
+    "random_state": 42,
+    "note": "Estimates Heat Index from same-record climate measurements. Not validated as a future heatwave forecast."
+}
