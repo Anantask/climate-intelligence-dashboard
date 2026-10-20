@@ -16,6 +16,96 @@ st.set_page_config(
     page_icon="🌡️",
     layout="wide"
 )
+st.markdown("""
+<style>
+    .stApp {
+        background: linear-gradient(135deg, #0b1220 0%, #101c2c 100%);
+    }
+
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        max-width: 1500px;
+    }
+
+    h1 {
+        color: #e6f7ff !important;
+        font-weight: 800 !important;
+        letter-spacing: -1px;
+    }
+
+    h2, h3 {
+        color: #c8f7e5 !important;
+        font-weight: 650 !important;
+    }
+
+    [data-testid="stMetric"] {
+        background: linear-gradient(145deg, #17283a, #142235);
+        border: 1px solid #29465a;
+        padding: 22px 20px;
+        border-radius: 16px;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    [data-testid="stMetricLabel"] {
+        color: #a9c2d4 !important;
+    }
+
+    [data-testid="stMetricValue"] {
+        color: #55e6b0 !important;
+        font-weight: 750 !important;
+    }
+
+    [data-testid="stSidebar"] {
+        background: #101a29;
+        border-right: 1px solid #26394d;
+    }
+
+    div[data-testid="stTabs"] button {
+        font-weight: 600;
+    }
+
+    div[data-testid="stPlotlyChart"] {
+        background: #111e2e;
+        border: 1px solid #263b50;
+        border-radius: 14px;
+        padding: 8px;
+    }
+
+    div[data-testid="stForm"] {
+        background: #132338;
+        border: 1px solid #2b465c;
+        padding: 22px;
+        border-radius: 16px;
+    }
+
+    div.stButton > button,
+    div.stFormSubmitButton > button {
+        background: #19b98a;
+        color: #071b18;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        padding: 0.55rem 1.2rem;
+    }
+
+    div.stButton > button:hover,
+    div.stFormSubmitButton > button:hover {
+        background: #52e6b5;
+        color: #071b18;
+        border: none;
+    }
+
+    [data-testid="stDataFrame"] {
+        border: 1px solid #263b50;
+        border-radius: 12px;
+    }
+
+    #MainMenu, footer {
+        visibility: hidden;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 BASE_DIR = Path(__file__).parent
 ASSET_DIR = BASE_DIR / "climate_dashboard_assets"
@@ -80,19 +170,25 @@ states = sorted(df["State"].dropna().unique().tolist())
 selected_states = st.sidebar.multiselect(
     "Select state(s)",
     states,
-    default=states
+    default=[]
 )
 
-state_data = df[df["State"].isin(selected_states)]
+state_data = (
+    df[df["State"].isin(selected_states)]
+    if selected_states else df.copy()
+)
 
 cities = sorted(state_data["City"].dropna().unique().tolist())
 selected_cities = st.sidebar.multiselect(
     "Select city/cities",
     cities,
-    default=cities
+    default=[]
 )
 
-filtered = state_data[state_data["City"].isin(selected_cities)].copy()
+filtered = (
+    state_data[state_data["City"].isin(selected_cities)].copy()
+    if selected_cities else state_data.copy()
+)
 
 valid_dates = filtered["Date"].dropna()
 if not valid_dates.empty:
